@@ -41,6 +41,7 @@ async def test_common_tools_register_with_mcp_v2():
         "list_xrefs",
         "read_bytes",
         "rename_function",
+        "rename_symbol",
         "rename_variable",
         "save",
         "search_code",
