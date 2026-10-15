@@ -473,7 +473,7 @@ class PyGhidraMcpClient:
     async def rename_symbol(
         self, binary_name: str, name_or_address: str, new_name: str
     ) -> dict[str, Any]:
-        """Rename any symbol by name or address, including data labels (DAT_*)."""
+        """Rename a symbol by name or address. Unnamed DAT_* labels resolve by address only."""
         if not self._connected:
             raise ClientError("Not connected")
 

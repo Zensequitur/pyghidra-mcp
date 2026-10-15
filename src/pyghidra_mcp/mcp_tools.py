@@ -324,7 +324,11 @@ def rename_symbol(
     new_name: str,
     ctx: Context,
 ) -> RenameResponse:
-    """Rename any symbol by name or address, including data labels (DAT_*)."""
+    """Rename a symbol by name or address.
+
+    Unnamed data labels such as ``DAT_00401000`` are not found by name; pass the
+    address instead (``0x00401000``). Once renamed, the label is found by its new name.
+    """
     pyghidra_context = _get_pyghidra_context(ctx)
     program_info = pyghidra_context.get_program_info(binary_name)
     tools = GhidraTools(program_info)

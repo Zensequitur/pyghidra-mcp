@@ -988,7 +988,7 @@ class GhidraTools:
 
     @handle_exceptions
     def rename_symbol(self, name_or_address: str, new_name: str) -> dict:
-        """Rename any symbol (including data labels such as DAT_*) by name or address."""
+        """Rename a symbol by name or address. Unnamed DAT_* labels resolve by address only."""
         from ghidra.program.model.symbol import SourceType
 
         symbol = self.find_symbol(name_or_address)

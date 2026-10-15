@@ -539,7 +539,7 @@ Per-item errors are returned inline (other targets still succeed):
 
 - `rename_function(binary_name: str, name_or_address: str, new_name: str)`: Rename a function by name or address. In GUI mode this runs as a live Ghidra transaction and updates the open program.
 
-- `rename_symbol(binary_name: str, name_or_address: str, new_name: str)`: Rename any symbol by name or address, including data labels (DAT_*). In GUI mode this runs as a live Ghidra transaction and updates the open program.
+- `rename_symbol(binary_name: str, name_or_address: str, new_name: str)`: Rename a symbol by name or address. Unnamed data labels (`DAT_*`) are not found by name, so pass their address instead. In GUI mode this runs as a live Ghidra transaction and updates the open program.
 
 - `rename_variable(binary_name: str, function_name_or_address: str, variable_name: str, new_name: str)`: Rename a function parameter or local variable by exact name within a specific function. If the name is missing or ambiguous within that function, the tool returns an error instead of guessing. In GUI mode this runs as a live Ghidra transaction and updates the open program.
 

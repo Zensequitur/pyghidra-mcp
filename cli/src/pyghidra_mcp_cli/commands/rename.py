@@ -58,7 +58,7 @@ def rename_function(
 def rename_symbol(
     ctx: click.Context, binary_name: str, name_or_address: str, new_name: str
 ) -> None:
-    """Rename any symbol (function, data label, DAT_*, etc.) by name or address."""
+    """Rename a symbol by name or address (use the address for unnamed DAT_* labels)."""
 
     client = PyGhidraMcpClient(host=ctx.obj["HOST"], port=ctx.obj["PORT"])
 
