@@ -1001,13 +1001,7 @@ class GhidraTools:
         ):
             symbol.setName(new_name, SourceType.USER_DEFINED)
 
-        # Invalidate decompiler cache only when the symbol is associated with a function.
-        try:
-            func = self.program.getFunctionManager().getFunctionAt(symbol.getAddress())
-            if func is not None:
-                self.invalidate_decompiler_cache()
-        except Exception:
-            pass
+        self.invalidate_decompiler_cache()
 
         return {
             "address": address,
