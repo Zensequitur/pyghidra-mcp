@@ -209,41 +209,6 @@ async def invoke_mutation_tools(base_url: str, server_binary_path):
                     "new_name": new_name,
                 },
             )
-
-            # Exercise rename_symbol on a data label if present (non-breaking).
-            try:
-                symbols_result = await session.call_tool(
-                    "search_symbols_by_name",
-                    {
-                        "binary_name": binary_name,
-                        "query": "DAT_",
-                        "functions_only": False,
-                        "limit": 1,
-                    },
-                )
-                symbols_payload = json.loads(symbols_result.content[0].text)
-                symbols = symbols_payload.get("symbols") or []
-                if symbols and isinstance(symbols[0], dict):
-                    dat_name = symbols[0]["name"]
-                    await session.call_tool(
-                        "rename_symbol",
-                        {
-                            "binary_name": binary_name,
-                            "name_or_address": dat_name,
-                            "new_name": f"{dat_name}_tmp",
-                        },
-                    )
-                    await session.call_tool(
-                        "rename_symbol",
-                        {
-                            "binary_name": binary_name,
-                            "name_or_address": f"{dat_name}_tmp",
-                            "new_name": dat_name,
-                        },
-                    )
-            except Exception:
-                pass  # Non-critical; concurrent test focuses on function rename.
-
             comment_response = await session.call_tool(
                 "set_comment",
                 {
