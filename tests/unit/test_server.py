@@ -43,6 +43,7 @@ async def test_common_tools_register_with_mcp_v2():
         "rename_function",
         "rename_variable",
         "save",
+        "search_bytes",
         "search_code",
         "search_strings",
         "search_symbols_by_name",
