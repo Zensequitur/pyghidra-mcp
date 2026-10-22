@@ -50,8 +50,8 @@ def _byte_search_pattern(pattern, value, width, endian, thumb):
     """Compile byte wildcards and the optional Thumb bit to a single masked pattern."""
     if (pattern is None) == (value is None):
         raise ValueError("Supply exactly one of pattern or value")
-    if width not in (1, 2, 4) or endian not in ("little", "big"):
-        raise ValueError("width must be 1, 2 or 4; endian must be little or big")
+    if width not in (1, 2, 4, 8) or endian not in ("little", "big"):
+        raise ValueError("width must be 1, 2, 4 or 8; endian must be little or big")
     if pattern is not None:
         if thumb or width != 4 or endian != "little":
             raise ValueError("width, endian and thumb apply only to value searches")
@@ -970,8 +970,8 @@ class GhidraTools:
         thumb: bool = False,
     ) -> BytesSearchResults:
         """Search initialized blocks with Memory.findBytes; no program transactions."""
-        if alignment not in (1, 2, 4):
-            raise ValueError("alignment must be 1, 2 or 4")
+        if alignment not in (1, 2, 4, 8):
+            raise ValueError("alignment must be 1, 2, 4 or 8")
         if not 1 <= max_results <= 1000:
             raise ValueError("max_results must be between 1 and 1000")
         if not 0 <= context_bytes <= 16:

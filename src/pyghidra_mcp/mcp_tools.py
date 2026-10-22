@@ -496,20 +496,20 @@ def search_bytes(
     pattern: str | None = None,
     start: str | None = None,
     end: str | None = None,
-    alignment: Literal[1, 2, 4] = 1,
+    alignment: Literal[1, 2, 4, 8] = 1,
     max_results: int = 50,
     context_bytes: int = 0,
     value: int | str | None = None,
-    width: Literal[1, 2, 4] = 4,
+    width: Literal[1, 2, 4, 8] = 4,
     endian: Literal["little", "big"] = "little",
     thumb: bool = False,
 ) -> BytesSearchResults:
     """Find bytes in initialized memory; return addresses and block names.
 
     Supply either hex pattern (spaces allowed, ?? wildcard) or unsigned value
-    (integer or decimal/0x string), width 1/2/4 (default 4), endian little/big.
+    (integer or decimal/0x string), width 1/2/4/8 (default 4), endian little/big.
     thumb also searches value|1. start/end are inclusive hex addresses in one
-    address space; matches stay within one block. alignment is 1/2/4.
+    address space; matches stay within one block. alignment is 1/2/4/8.
     max_results is 1-1000 (default 50); truncated means more hits exist and
     total_matches is null. searched_blocks lists visited blocks. context_bytes
     is 0-16 per side (default 0), clipped to the block and range.

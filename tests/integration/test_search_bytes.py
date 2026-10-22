@@ -15,12 +15,16 @@ def byte_search_server(tmp_path, ghidra_env):
     source = tmp_path / "patterns.c"
     source.write_text(
         """
-volatile unsigned char search_fixture[64] __attribute__((aligned(4))) = {
+volatile unsigned char search_fixture[64] __attribute__((aligned(8))) = {
     0xde, 0xad, 0xbe, 0xef, 0x11, 0x22, 0x33,
     0xde, 0xad, 0xbe, 0xef, 0x44,
     0xde, 0xad, 0xbe, 0xef, 0xde, 0xad, 0xaa, 0xef,
     0xb6, 0x47, 0, 0, 0xb7, 0x47, 0, 0, 0, 0, 0x47, 0xb6,
-    0xaa, 0xaa, 0xaa, 0xaa
+    0xaa, 0xaa, 0xaa, 0xaa,
+    0, 0, 0, 0,
+    0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01,
+    0, 0, 0, 0,
+    0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01
 };
 volatile unsigned char search_uninitialized[128];
 int main(void) { return search_fixture[0] + search_uninitialized[0]; }
@@ -123,7 +127,12 @@ async def test_search_bytes(byte_search_server):
             assert offsets(big_thumb) == [28]
             byte = await search(value=0xDE, width=1, **scope)
             assert offsets(byte) == [0, 7, 12, 16]
-
+            wide = await search(value="0x0123456789abcdef", width=8, **scope)
+            assert offsets(wide) == [40, 52]
+            wide_by_4 = await search(value=0x0123456789ABCDEF, width=8, alignment=4, **scope)
+            assert offsets(wide_by_4) == [40, 52]
+            wide_aligned = await search(value="0x0123456789abcdef", width=8, alignment=8, **scope)
+            assert offsets(wide_aligned) == [40]
             overlap = await search(pattern="aa aa", **scope)
             assert offsets(overlap) == [32, 33, 34]
             wild_only = await search(pattern="?? ??", start=hex(base), end=hex(base + 3))
@@ -154,6 +163,7 @@ async def test_search_bytes(byte_search_server):
                 ({"pattern": "aa", "thumb": True}, "only to value"),
                 ({"value": -1}, "unsigned"),
                 ({"value": 256, "width": 1}, "unsigned"),
+                ({"value": "0x10000000000000000", "width": 8}, "unsigned"),
                 ({"value": "not-a-number"}, "unsigned"),
                 ({"pattern": "aa", "max_results": 0}, "between 1 and 1000"),
                 ({"pattern": "aa", "max_results": 1001}, "between 1 and 1000"),
